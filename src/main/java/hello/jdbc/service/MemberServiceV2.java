@@ -26,7 +26,6 @@ public class MemberServiceV2 {
             //비즈니스 로직
             bizLogic(con, fromId, toId, money);
             con.commit();   //성공시 커밋
-
         } catch (Exception e) {
             con.rollback(); //실패시 롤백
             throw new IllegalStateException(e);
@@ -39,9 +38,9 @@ public class MemberServiceV2 {
         Member fromMember = memberRepository.findById(con, fromId);
         Member toMember = memberRepository.findById(con, toId);
 
-        memberRepository.update(fromId, fromMember.getMoney() - money);
+        memberRepository.update(con, fromId, fromMember.getMoney() - money);
         validation(toMember);
-        memberRepository.update(toId, toMember.getMoney() + money);
+        memberRepository.update(con, toId, toMember.getMoney() + money);
     }
 
     private void release(Connection con) {
